@@ -43,6 +43,6 @@ func (r *Tokenizer) Tokenize(str string) []string {
 	}
 
 	buf.Reset()
-	r.tokensBuf = result[0:]
+	r.tokensBuf = result[:0]
 	return result
 }
