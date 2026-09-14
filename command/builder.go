@@ -6,12 +6,18 @@ type Builder struct {
 	subName      string
 	descriptors  []ParamDescriptor
 	optionalMode bool
+	aliases      []string
 }
 
 // AddSubCommand adds subcommand.
 func (b *Builder) AddSubCommand(cmd *Command, name string) {
 	b.sub = cmd
 	b.subName = name
+}
+
+// AddAlias adds command alias.
+func (b *Builder) AddAlias(alias string) {
+	b.aliases = append(b.aliases, alias)
 }
 
 // EnableOptionalMode enables optional mode.
@@ -74,8 +80,10 @@ func (b *Builder) addDescriptor[T any](descriptor ParamDescriptor) Result[T] {
 }
 
 // Build builds Command.
-func (b *Builder) Build(run func()) *Command {
+func (b *Builder) Build(description string, run func()) *Command {
 	return &Command{
+		description: description,
+		aliases:     b.aliases,
 		sub:         b.sub,
 		subName:     b.subName,
 		descriptors: b.descriptors,

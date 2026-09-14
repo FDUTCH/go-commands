@@ -6,11 +6,29 @@ import "slices"
 // only one user should have access to the current instance at the same time.
 // Command should never run from 2 (or more) different goroutines.
 type Command struct {
+	description string
+	aliases     []string
+
 	sub     *Command
 	subName string
 
 	descriptors []ParamDescriptor
 	run         func()
+}
+
+// Aliases returns command aliases.
+func (c *Command) Aliases() []string {
+	return slices.Clone(c.aliases)
+}
+
+// Sub returns subcommand and it's name.
+func (c *Command) Sub() (sub *Command, name string) {
+	return c.sub, c.subName
+}
+
+// Description returns command description.
+func (c *Command) Description() string {
+	return c.description
 }
 
 // Descriptors returns slice of param descriptors of the current Command.
